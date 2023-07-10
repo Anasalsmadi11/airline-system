@@ -3,16 +3,50 @@
 require('dotenv').config()
 const port = process.env.PORT
 const socket= require('socket.io')
+const uuid= require('uuid').v4
 const ioServer= socket(port)
+
+const queue ={
+  flights:{
+
+  }
+}
+
 
 ioServer.on('connection', (newSocket)=>{
   console.log(`welcome to server socket , id: ${newSocket.id}`)
   
   newSocket.on('new-flight', (flightDetails) => {
-      console.log('Flight', flightDetails);
+    console.log( `i got your message`)
+      // console.log('Flight', flightDetails);
       ioServer.emit('new-flight', flightDetails)
-    });
+
+    const id = uuid()
+    queue.flights[id]= flightDetails
+
+    newSocket.emit('added', flightDetails)
+
+    ioServer.emit('flight',{
+      id: id,
+      payload: queue.flights[id]
+    })
+
+  });
+     newSocket.on('get_all',()=>{
+      console.log('queue v1 ', queue);
+      Object.keys(queue.flights).forEach((id)=>{
+        newSocket.emit('flight',{
+          id:id,
+          payload: queue.flights[id]
+        })
+      })
+    })
     
+    newSocket.on('recieved',(flight)=>{
+     delete queue.flights[flight.id]
+
+     console.log('queue deleted ', queue);
+    })
     // newSocket.on('took-off', (flightDetails) => {
     //   console.log('Flight', flightDetails);
     // });

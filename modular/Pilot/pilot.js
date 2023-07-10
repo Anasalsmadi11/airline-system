@@ -13,12 +13,19 @@ pilotConnection.on('test', ()=>{
 })
 
 
+
 systemConnection.on('new-flight', (flightDetails) => { 
     setTimeout(() => {
       console.log('Pilot: flight with ID', flightDetails.Details.flightID, 'took-off');
       flightDetails.event = 'took_off';
       flightDetails.time = new Date();
       pilotConnection.emit('took-off', flightDetails);
+      
+      systemConnection.emit('get_all')
+    systemConnection.on('flight', (flight)=>{
+    console.log('Pilot:Sorry i didnt catch this flight ID',flight.id)
+    systemConnection.emit('recieved', flight)
+  })
     }, 4000);
     setTimeout(() => {
       console.log('Pilot: flight with ID', flightDetails.Details.flightID, 'has arrived');
@@ -28,4 +35,5 @@ systemConnection.on('new-flight', (flightDetails) => {
     }, 7000);
   });
   
+
 
