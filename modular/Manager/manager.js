@@ -33,6 +33,10 @@ setInterval(() => {
     systemConnection.emit('new-flight', flightDetails);
   }, 10000);
   
+  systemConnection.on('added', (payload) => {
+    console.log('Thank you for adding flightDetails to the queue object')
+   
+})
   systemConnection.on('arrived', (flightDetails) => {
     console.log('Manager: we’re greatly thankful for the amazing flight,', flightDetails.Details.pilot);
   });
