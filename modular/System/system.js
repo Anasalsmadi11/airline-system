@@ -33,16 +33,16 @@ ioServer.on('connection', (newSocket)=>{
 
   });
      newSocket.on('get_all',()=>{
-      console.log('queue v1 ', queue);
-      Object.keys(queue.flights).forEach((id)=>{
-        newSocket.emit('flight',{
-          id:id,
-          payload: queue.flights[id]
+       Object.keys(queue.flights).forEach((id)=>{
+         newSocket.emit('flight',{
+           id:id,
+           payload: queue.flights[id]
+          })
         })
       })
-    })
-    
-    newSocket.on('recieved',(flight)=>{
+      
+      newSocket.on('recieved',(flight)=>{
+      console.log('queue v1 ', queue);
      delete queue.flights[flight.id]
 
      console.log('queue deleted ', queue);

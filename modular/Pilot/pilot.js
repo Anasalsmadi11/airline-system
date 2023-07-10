@@ -13,6 +13,11 @@ pilotConnection.on('test', ()=>{
 })
 
 
+systemConnection.emit('get_all')
+systemConnection.on('flight', (flight)=>{
+console.log('Pilot:Sorry i didnt catch this flight ID',flight.id)
+systemConnection.emit('recieved', flight)
+})
 
 systemConnection.on('new-flight', (flightDetails) => { 
     setTimeout(() => {
@@ -21,11 +26,11 @@ systemConnection.on('new-flight', (flightDetails) => {
       flightDetails.time = new Date();
       pilotConnection.emit('took-off', flightDetails);
       
-      systemConnection.emit('get_all')
-    systemConnection.on('flight', (flight)=>{
-    console.log('Pilot:Sorry i didnt catch this flight ID',flight.id)
-    systemConnection.emit('recieved', flight)
-  })
+  //     systemConnection.emit('get_all')
+  //   systemConnection.on('flight', (flight)=>{
+  //   console.log('Pilot:Sorry i didnt catch this flight ID',flight.id)
+  //   systemConnection.emit('recieved', flight)
+  // })
     }, 4000);
     setTimeout(() => {
       console.log('Pilot: flight with ID', flightDetails.Details.flightID, 'has arrived');
